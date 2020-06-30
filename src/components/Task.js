@@ -1,6 +1,6 @@
 import React from "react";
 import Subtask from "./Subtask";
-import { Pane, Heading, Card } from "evergreen-ui";
+import { Pane, Heading, Card, Button } from "evergreen-ui";
 
 class Task extends React.Component {
     constructor() {
@@ -9,32 +9,36 @@ class Task extends React.Component {
             title: "",
             dueDate: "",
             subtasks: [],
-            completion: 0.0,
+            completion: 0,
+            id: "",
         };
         this.updateSubtask = this.updateSubtask.bind(this);
         this.updateProgress = this.updateProgress.bind(this);
     }
+    // Add props to state, update completion progress for pre-programmed tasks
     componentDidMount() {
         var completed = 0;
         var total = this.props.subtasks.length;
         for (let i = 0; i < total; i++) {
             if (this.props.subtasks[i].completed) completed++;
         }
-        var totalProgress = ((completed * 100) / total).toFixed(2);
+        var totalProgress = Math.round((completed * 100) / total);
         this.setState({
             title: this.props.title,
             dueDate: this.props.dueDate,
             subtasks: this.props.subtasks,
             completion: totalProgress,
+            id: this.props.key,
         });
     }
+    // Updates progress percentage based on completed subtasks from state
     updateProgress() {
         var completed = 0;
         var total = this.state.subtasks.length;
         for (let i = 0; i < total; i++) {
             if (this.state.subtasks[i].completed) completed++;
         }
-        var totalProgress = ((completed * 100) / total).toFixed(2);
+        var totalProgress = Math.round((completed * 100) / total);
         this.setState((prevState) => {
             return {
                 ...prevState,
@@ -42,6 +46,7 @@ class Task extends React.Component {
             };
         });
     }
+    // Toggle subtask completion
     updateSubtask(id) {
         const updateTasks = this.state.subtasks;
         for (let i = 0; i < updateTasks.length; i++) {
@@ -76,13 +81,23 @@ class Task extends React.Component {
                     margin="1em"
                     background="tint1"
                     border
+                    display="flex"
                 >
-                    <Heading size={700}>{this.state.title}</Heading>
-                    <Heading size={500} marginTop="1em">
-                        Due Date: {this.state.dueDate}
-                    </Heading>
-                    <Heading>Completion: {this.state.completion}%</Heading>
-                    <Pane>{subtasksComponents}</Pane>
+                    <Pane width="50%">
+                        <Heading size={700}>{this.state.title}</Heading>
+                        <Heading size={500} marginTop="1em">
+                            Due Date: {this.state.dueDate}
+                        </Heading>
+                        <Heading>Completion: {this.state.completion}%</Heading>
+                        <Pane>{subtasksComponents}</Pane>
+                        <Button
+                            appearance="primary"
+                            intent="danger"
+                            onClick={this.props.removeTask(this.state.id)}
+                        >
+                            Delete Task
+                        </Button>
+                    </Pane>
                 </Card>
             </div>
         );

@@ -11,6 +11,7 @@ class Subtask extends React.Component {
         };
         this.handleChange = this.handleChange.bind(this);
     }
+    // Record props into state
     componentDidMount() {
         this.setState({
             title: this.props.title,
@@ -18,6 +19,7 @@ class Subtask extends React.Component {
             id: this.props.id,
         });
     }
+    // Toggle subtask completion
     handleChange() {
         this.setState((prevState) => {
             return {
