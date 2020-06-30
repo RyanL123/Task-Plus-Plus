@@ -3,8 +3,8 @@ import Subtask from "./Subtask";
 import { Pane, Heading, Card, Button } from "evergreen-ui";
 
 class Task extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             title: "",
             dueDate: "",
@@ -28,7 +28,7 @@ class Task extends React.Component {
             dueDate: this.props.dueDate,
             subtasks: this.props.subtasks,
             completion: totalProgress,
-            id: this.props.key,
+            id: this.props.id,
         });
     }
     // Updates progress percentage based on completed subtasks from state
@@ -74,32 +74,30 @@ class Task extends React.Component {
             );
         });
         return (
-            <div>
-                <Card
-                    elevation={2}
-                    padding={20}
-                    margin="1em"
-                    background="tint1"
-                    border
-                    display="flex"
-                >
-                    <Pane width="50%">
-                        <Heading size={700}>{this.state.title}</Heading>
-                        <Heading size={500} marginTop="1em">
-                            Due Date: {this.state.dueDate}
-                        </Heading>
-                        <Heading>Completion: {this.state.completion}%</Heading>
-                        <Pane>{subtasksComponents}</Pane>
-                        <Button
-                            appearance="primary"
-                            intent="danger"
-                            onClick={this.props.removeTask(this.state.id)}
-                        >
-                            Delete Task
-                        </Button>
-                    </Pane>
-                </Card>
-            </div>
+            <Card
+                elevation={2}
+                padding={20}
+                margin="1em"
+                background="tint1"
+                border
+                display="flex"
+            >
+                <Pane width="50%">
+                    <Heading size={700}>{this.state.title}</Heading>
+                    <Heading size={500} marginTop="1em">
+                        Due Date: {this.state.dueDate}
+                    </Heading>
+                    <Heading>Completion: {this.state.completion}%</Heading>
+                    <Pane>{subtasksComponents}</Pane>
+                    <Button
+                        appearance="primary"
+                        intent="danger"
+                        onClick={() => this.props.removeTask(this.state.id)}
+                    >
+                        Delete Task
+                    </Button>
+                </Pane>
+            </Card>
         );
     }
 }

@@ -2,8 +2,8 @@ import React from "react";
 import { Checkbox } from "evergreen-ui";
 
 class Subtask extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             title: "",
             completed: false,

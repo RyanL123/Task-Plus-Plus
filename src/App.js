@@ -56,6 +56,7 @@ class App extends React.Component {
     // Updates the new incoming task state with values in forms
     updateNewTask(event) {
         const { name, value, type } = event.target;
+        // Handles subtasks
         if (type === "textarea") {
             const subtasks = value.split(",").map((subtask, index) => {
                 return {
@@ -70,7 +71,9 @@ class App extends React.Component {
                     [name]: subtasks,
                 },
             });
-        } else {
+        }
+        // All other fields
+        else {
             this.setState({
                 newTask: {
                     ...this.state.newTask,
@@ -78,7 +81,6 @@ class App extends React.Component {
                 },
             });
         }
-        console.log(this.state.newTask);
     }
     // Write the incoming new task into the tasks array and clear it
     addNewTask() {
@@ -89,24 +91,24 @@ class App extends React.Component {
             dueDate: "",
             subtasks: [],
         };
+        // Update unique key
         newState.key = this.state.key + 1;
         this.setState(newState);
     }
-    // Function doesn't get passed as props for some reason
+    // Removes task with matching id from state
     removeTask(id) {
-        console.log("Success");
         let prevTasks = this.state.tasks;
-        // let ind = 0;
-        // for (let i = 0; i < prevTasks.length; i++) {
-        //     if (prevTasks[i].key === id) {
-        //         ind = i;
-        //         break;
-        //     }
-        // }
-        // delete prevTasks[ind];
-        // this.setState({
-        //     tasks: prevTasks,
-        // });
+        let ind = 0;
+        for (let i = 0; i < prevTasks.length; i++) {
+            if (prevTasks[i].key === id) {
+                ind = i;
+                break;
+            }
+        }
+        prevTasks.splice(ind, 1);
+        this.setState({
+            tasks: prevTasks,
+        });
     }
     render() {
         const tasks = this.state.tasks;
