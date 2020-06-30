@@ -85,11 +85,13 @@ class Task extends React.Component {
                 display="flex"
             >
                 <Pane width="50%">
-                    <Heading size={700}>{this.state.title}</Heading>
+                    <Heading size={800}>{this.state.title}</Heading>
                     <Heading size={500} marginTop="1em">
                         Due Date: {this.state.dueDate}
                     </Heading>
-                    <Heading>Completion: {this.state.completion}%</Heading>
+                    <Heading size={500} marginTop="0.5em">
+                        Completion: {this.state.completion}%
+                    </Heading>
                     <Pane>{subtasksComponents}</Pane>
                     <Button
                         appearance="primary"

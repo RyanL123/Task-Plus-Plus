@@ -8,6 +8,7 @@ import {
     toaster,
 } from "evergreen-ui";
 import Task from "./components/Task";
+import "./App.css";
 
 class App extends React.Component {
     constructor() {
@@ -15,16 +16,16 @@ class App extends React.Component {
         this.state = {
             tasks: [
                 {
-                    title: "task1",
+                    title: "Task 1",
                     dueDate: "2020/01/20",
                     subtasks: [
                         {
-                            title: "subtask 1",
+                            title: "Subtask 1",
                             completed: false,
                             key: 1,
                         },
                         {
-                            title: "subtask 2",
+                            title: "Subtask 2",
                             completed: true,
                             key: 2,
                         },
@@ -32,16 +33,16 @@ class App extends React.Component {
                     key: 1,
                 },
                 {
-                    title: "task2",
+                    title: "Task 2",
                     dueDate: "2020/04/20",
                     subtasks: [
                         {
-                            title: "subtask 1",
+                            title: "Subtask 1",
                             completed: true,
                             key: 1,
                         },
                         {
-                            title: "subtask 2",
+                            title: "Subtask 2",
                             completed: true,
                             key: 2,
                         },
@@ -138,14 +139,25 @@ class App extends React.Component {
             );
         });
         return (
-            <div>
+            <Pane
+                justifyContent="space-between"
+                display="flex"
+                flexDirection="row"
+                marginTop="5vh"
+                marginLeft="5vw"
+                marginRight="5vw"
+                flexWrap="wrap"
+                className="container"
+            >
                 <Pane
+                    width="50%"
+                    background="blueTint"
+                    padding={20}
+                    borderRadius={10}
+                    elevation={2}
+                    border
+                    className="max-width"
                     justifyContent="center"
-                    display="flex"
-                    flexDirection="column"
-                    marginTop="3%"
-                    marginLeft="15%"
-                    marginRight="15%"
                 >
                     <TextInputField
                         label="Title"
@@ -170,7 +182,7 @@ class App extends React.Component {
                         placeholder="..."
                         height={48}
                         name="subtasks"
-                        placeholder="Comma separated subtasks (e.g. subtask1,subtask2,subtask3)"
+                        placeholder="Comma separated subtasks (e.g. subtask 1, subtask 2, subtask 3)"
                         value={this.state.newTask.subtasks
                             .map((subtask) => subtask.title)
                             .join(",")}
@@ -190,13 +202,12 @@ class App extends React.Component {
                     justifyContent="center"
                     display="flex"
                     flexDirection="column"
-                    marginTop="3%"
-                    marginLeft="15%"
-                    marginRight="15%"
+                    width="45%"
+                    className="max-width"
                 >
                     {taskComponents}
                 </Pane>
-            </div>
+            </Pane>
         );
     }
 }
