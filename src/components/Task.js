@@ -1,6 +1,6 @@
 import React from "react";
 import Subtask from "./Subtask";
-import { Pane, Heading } from "evergreen-ui";
+import { Pane, Heading, Card } from "evergreen-ui";
 
 class Task extends React.Component {
     constructor() {
@@ -28,25 +28,6 @@ class Task extends React.Component {
             completion: totalProgress,
         });
     }
-    updateSubtask(id) {
-        this.setState((prevState) => {
-            const updateTasks = prevState.subtasks.map((subtask) => {
-                console.log(subtask.key + " " + id);
-                if (subtask.key === id) {
-                    // console.log("success");
-                    return {
-                        ...subtask,
-                        completed: !subtask.completed,
-                    };
-                }
-                return subtask;
-            });
-            return {
-                subtasks: updateTasks,
-            };
-        });
-        this.updateProgress();
-    }
     updateProgress() {
         var completed = 0;
         var total = this.state.subtasks.length;
@@ -60,6 +41,19 @@ class Task extends React.Component {
                 completion: totalProgress,
             };
         });
+    }
+    updateSubtask(id) {
+        const updateTasks = this.state.subtasks;
+        for (let i = 0; i < updateTasks.length; i++) {
+            if (updateTasks[i].key === id) {
+                updateTasks[i].completed = !updateTasks[i].completed;
+                break;
+            }
+        }
+        this.setState({
+            subtasks: updateTasks,
+        });
+        this.updateProgress();
     }
     render() {
         const subtasks = this.props.subtasks;
@@ -76,12 +70,20 @@ class Task extends React.Component {
         });
         return (
             <div>
-                <Heading size={700}>{this.state.title}</Heading>
-                <Heading size={500} marginTop="1em">
-                    Due Date: {this.state.dueDate}
-                </Heading>
-                <Heading>Completion: {this.state.completion}%</Heading>
-                <Pane>{subtasksComponents}</Pane>
+                <Card
+                    elevation={2}
+                    padding={20}
+                    margin="1em"
+                    background="tint1"
+                    border
+                >
+                    <Heading size={700}>{this.state.title}</Heading>
+                    <Heading size={500} marginTop="1em">
+                        Due Date: {this.state.dueDate}
+                    </Heading>
+                    <Heading>Completion: {this.state.completion}%</Heading>
+                    <Pane>{subtasksComponents}</Pane>
+                </Card>
             </div>
         );
     }

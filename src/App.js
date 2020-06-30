@@ -60,6 +60,7 @@ class App extends React.Component {
                     dueDate={task.dueDate}
                     subtasks={task.subtasks}
                     key={task.key}
+                    id={task.key}
                 />
             );
         });
