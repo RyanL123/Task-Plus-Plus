@@ -22,7 +22,8 @@ class Task extends React.Component {
         for (let i = 0; i < total; i++) {
             if (this.props.subtasks[i].completed) completed++;
         }
-        var totalProgress = Math.round((completed * 100) / total);
+        var totalProgress =
+            total == 0 ? 0 : Math.round((completed * 100) / total);
         this.setState({
             title: this.props.title,
             dueDate: this.props.dueDate,
@@ -38,7 +39,8 @@ class Task extends React.Component {
         for (let i = 0; i < total; i++) {
             if (this.state.subtasks[i].completed) completed++;
         }
-        var totalProgress = Math.round((completed * 100) / total);
+        var totalProgress =
+            total == 0 ? 0 : Math.round((completed * 100) / total);
         this.setState((prevState) => {
             return {
                 ...prevState,
@@ -92,6 +94,7 @@ class Task extends React.Component {
                     <Button
                         appearance="primary"
                         intent="danger"
+                        marginTop="1em"
                         onClick={() => this.props.removeTask(this.state.id)}
                     >
                         Delete Task

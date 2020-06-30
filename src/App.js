@@ -1,5 +1,12 @@
 import React from "react";
-import { Pane, Button, Textarea, Label, TextInputField } from "evergreen-ui";
+import {
+    Pane,
+    Button,
+    Textarea,
+    Label,
+    TextInputField,
+    toaster,
+} from "evergreen-ui";
 import Task from "./components/Task";
 
 class App extends React.Component {
@@ -84,6 +91,10 @@ class App extends React.Component {
     }
     // Write the incoming new task into the tasks array and clear it
     addNewTask() {
+        if (this.state.newTask.title === "") {
+            toaster.danger("Your task must have a title!", { duration: 1 });
+            return;
+        }
         let newState = this.state;
         newState.tasks.push(this.state.newTask);
         newState.newTask = {
@@ -94,6 +105,7 @@ class App extends React.Component {
         // Update unique key
         newState.key = this.state.key + 1;
         this.setState(newState);
+        toaster.success("Task successfully created", { duration: 1 });
     }
     // Removes task with matching id from state
     removeTask(id) {
@@ -109,6 +121,7 @@ class App extends React.Component {
         this.setState({
             tasks: prevTasks,
         });
+        toaster.danger("Task successfully deleted", { duration: 1 });
     }
     render() {
         const tasks = this.state.tasks;
