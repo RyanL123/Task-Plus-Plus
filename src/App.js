@@ -6,60 +6,42 @@ import {
     Label,
     TextInputField,
     toaster,
+    SegmentedControl,
 } from "evergreen-ui";
 import Task from "./components/Task";
 import "./App.css";
+import defaultTasks from "./default";
 
 class App extends React.Component {
     constructor() {
         super();
         this.state = {
-            tasks: [
-                {
-                    title: "Task 1",
-                    dueDate: "2020/01/20",
-                    subtasks: [
-                        {
-                            title: "Subtask 1",
-                            completed: false,
-                            key: 1,
-                        },
-                        {
-                            title: "Subtask 2",
-                            completed: true,
-                            key: 2,
-                        },
-                    ],
-                    key: 1,
-                },
-                {
-                    title: "Task 2",
-                    dueDate: "2020/04/20",
-                    subtasks: [
-                        {
-                            title: "Subtask 1",
-                            completed: true,
-                            key: 1,
-                        },
-                        {
-                            title: "Subtask 2",
-                            completed: true,
-                            key: 2,
-                        },
-                    ],
-                    key: 2,
-                },
-            ],
+            tasks: defaultTasks,
             newTask: {
                 title: "",
                 dueDate: "",
                 subtasks: [],
+                completion: 0,
             },
             key: 3,
+            sortOptions: [
+                {
+                    label: "Completion Ascending",
+                    value: "completion-ascending",
+                },
+                {
+                    label: "Completion Descending",
+                    value: "completion-descending",
+                },
+            ],
+            taskSortOrder: "completion-descending",
         };
+
         this.updateNewTask = this.updateNewTask.bind(this);
         this.addNewTask = this.addNewTask.bind(this);
         this.removeTask = this.removeTask.bind(this);
+        this.sortTasks = this.sortTasks.bind(this);
+        this.updateStateWithChild = this.updateStateWithChild.bind(this);
     }
     // Updates the new incoming task state with values in forms
     updateNewTask(event) {
@@ -124,6 +106,42 @@ class App extends React.Component {
         });
         toaster.danger("Task successfully deleted", { duration: 1 });
     }
+    sortTasks(event) {
+        this.setState({
+            taskSortOrder: event,
+        });
+        if (this.state.taskSortOrder === "completion-descending") {
+            this.setState((prevState) => {
+                return {
+                    tasks: prevState.tasks.sort(function (a, b) {
+                        return a.completion - b.completion;
+                    }),
+                };
+            });
+        } else if (this.state.taskSortOrder === "completion-ascending") {
+            this.setState((prevState) => {
+                return {
+                    tasks: prevState.tasks.sort(function (a, b) {
+                        return b.completion - a.completion;
+                    }),
+                };
+            });
+        }
+    }
+    updateStateWithChild(incomingTask) {
+        this.setState((prevState) => {
+            return {
+                tasks: prevState.tasks.map((task) => {
+                    if (task.key === incomingTask.id) {
+                        return {
+                            ...incomingTask,
+                            key: task.key,
+                        };
+                    } else return task;
+                }),
+            };
+        });
+    }
     render() {
         const tasks = this.state.tasks;
         const taskComponents = tasks.map((task) => {
@@ -135,6 +153,7 @@ class App extends React.Component {
                     key={task.key}
                     id={task.key}
                     removeTask={this.removeTask}
+                    updateParent={this.updateStateWithChild}
                 />
             );
         });
@@ -158,6 +177,8 @@ class App extends React.Component {
                     border
                     className="max-width"
                     justifyContent="center"
+                    height="500px"
+                    marginBottom="1em"
                 >
                     <TextInputField
                         label="Title"
@@ -179,7 +200,6 @@ class App extends React.Component {
                     <Label htmlFor="subtasks">Subtasks</Label>
                     <Textarea
                         id="subtasks"
-                        placeholder="..."
                         height={48}
                         name="subtasks"
                         placeholder="Comma separated subtasks (e.g. subtask 1, subtask 2, subtask 3)"
@@ -205,6 +225,11 @@ class App extends React.Component {
                     width="45%"
                     className="max-width"
                 >
+                    <SegmentedControl
+                        options={this.state.sortOptions}
+                        value={this.state.taskSortOrder}
+                        onChange={(value) => this.sortTasks(value)}
+                    />
                     {taskComponents}
                 </Pane>
             </Pane>

@@ -23,7 +23,7 @@ class Task extends React.Component {
             if (this.props.subtasks[i].completed) completed++;
         }
         var totalProgress =
-            total == 0 ? 0 : Math.round((completed * 100) / total);
+            total === 0 ? 0 : Math.round((completed * 100) / total);
         this.setState({
             title: this.props.title,
             dueDate: this.props.dueDate,
@@ -40,13 +40,15 @@ class Task extends React.Component {
             if (this.state.subtasks[i].completed) completed++;
         }
         var totalProgress =
-            total == 0 ? 0 : Math.round((completed * 100) / total);
-        this.setState((prevState) => {
-            return {
-                ...prevState,
+            total === 0 ? 0 : Math.round((completed * 100) / total);
+        this.setState(
+            {
                 completion: totalProgress,
-            };
-        });
+            },
+            () => {
+                this.props.updateParent(this.state);
+            }
+        );
     }
     // Toggle subtask completion
     updateSubtask(id) {
@@ -57,10 +59,14 @@ class Task extends React.Component {
                 break;
             }
         }
-        this.setState({
-            subtasks: updateTasks,
-        });
-        this.updateProgress();
+        this.setState(
+            {
+                subtasks: updateTasks,
+            },
+            () => {
+                this.updateProgress();
+            }
+        );
     }
     render() {
         const subtasks = this.props.subtasks;

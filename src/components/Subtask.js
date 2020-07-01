@@ -21,12 +21,16 @@ class Subtask extends React.Component {
     }
     // Toggle subtask completion
     handleChange() {
-        this.setState((prevState) => {
-            return {
-                completed: !prevState.completed,
-            };
-        });
-        this.props.updateSubtask(this.state.id);
+        this.setState(
+            (prevState) => {
+                return {
+                    completed: !prevState.completed,
+                };
+            },
+            () => {
+                this.props.updateSubtask(this.state.id);
+            }
+        );
     }
     render() {
         return (
