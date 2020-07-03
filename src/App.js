@@ -22,6 +22,8 @@ class App extends React.Component {
                 dueDate: "",
                 subtasks: [],
                 completion: 0,
+                id: "",
+                key: "",
             },
             key: 3,
             sortOptions: [
@@ -80,6 +82,8 @@ class App extends React.Component {
         }
         let newState = this.state;
         newState.tasks.push(this.state.newTask);
+        this.state.newTask.id = this.state.key;
+        this.state.newTask.key = this.state.key;
         newState.newTask = {
             title: "",
             dueDate: "",
