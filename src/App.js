@@ -48,8 +48,9 @@ class App extends React.Component {
     // Updates the new incoming task state with values in forms
     updateNewTask(event) {
         const { name, value, type } = event.target;
-        // Handles subtasks
+        // Handles subtasks field
         if (type === "textarea") {
+            // Split subtasks into array by commas
             const subtasks = value.split(",").map((subtask, index) => {
                 return {
                     title: subtask,
@@ -81,17 +82,30 @@ class App extends React.Component {
             return;
         }
         let newState = this.state;
-        newState.tasks.push(this.state.newTask);
-        this.state.newTask.id = this.state.key;
-        this.state.newTask.key = this.state.key;
-        newState.newTask = {
-            title: "",
-            dueDate: "",
-            subtasks: [],
-        };
-        // Update unique key
-        newState.key = this.state.key + 1;
-        this.setState(newState);
+        // Update new task with current key
+        this.setState(
+            {
+                newTask: {
+                    ...this.state.newTask,
+                    id: this.state.key,
+                    key: this.state.key,
+                },
+            },
+            () => {
+                // Update the state with the new subtask
+                newState.tasks.push(this.state.newTask);
+                // Clears new task object
+                newState.newTask = {
+                    title: "",
+                    dueDate: "",
+                    subtasks: [],
+                    id: "",
+                    key: "",
+                };
+                newState.key = this.state.key + 1;
+                this.setState(newState);
+            }
+        );
         toaster.success("Task successfully created", { duration: 1 });
     }
     // Removes task with matching id from state
