@@ -82,12 +82,8 @@ class App extends React.Component {
         }
         let newState = this.state;
         newState.tasks.push(this.state.newTask);
-        this.setState({
-            newTask: {
-                id: this.state.key,
-                key: this.state.key,
-            },
-        });
+        this.state.newTask.id = this.state.key;
+        this.state.newTask.key = this.state.key;
         newState.newTask = {
             title: "",
             dueDate: "",
